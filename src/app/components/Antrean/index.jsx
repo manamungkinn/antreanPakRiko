@@ -13,7 +13,15 @@ const Antrean = ({ data }) => {
   const noAntreanMentah = updateAntrean + 1;
   const noAntrean = noAntreanMentah.toString();
   const route = useRouter();
-  const tanggal = format(new Date(), "yyyy-MMM-dd");
+  
+function formatToPattern(dateArg, formatString) {
+  const date = typeof dateArg === "string" ? new Date(dateArg) : dateArg;
+  const zonedDate = date.toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
+  return format(zonedDate, formatString);
+}
+//   const tanggal = format(new Date(), "yyyy-MMM-dd");
+const date =new Date()
+  const tanggal = formatToPattern(date,"yyyy-MMM-dd")
 
   const dataPelanggan = data.filter((item) => item.tanggal == tanggal);
 
