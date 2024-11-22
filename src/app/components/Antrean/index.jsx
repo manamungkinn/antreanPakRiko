@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { format} from "date-fns";
+import { format } from "date-fns";
 
-const Antrean = ({ data }) => {
+const Antrean = ({ dataPelanggan }) => {
+  const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [created, setIsCreated] = useState(false);
   const [updateAntrean, setUpdateAntrean] = useState(0);
@@ -13,17 +14,18 @@ const Antrean = ({ data }) => {
   const noAntreanMentah = updateAntrean + 1;
   const noAntrean = noAntreanMentah.toString();
   const route = useRouter();
-  
-function formatToPattern(dateArg, formatString) {
-  const date = typeof dateArg === "string" ? new Date(dateArg) : dateArg;
-  const zonedDate = date.toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
-  return format(zonedDate, formatString);
-}
-//   const tanggal = format(new Date(), "yyyy-MMM-dd");
-const date =new Date()
-  const tanggal = formatToPattern(date,"yyyy-MMM-dd")
 
-  const dataPelanggan = data.filter((item) => item.tanggal == tanggal);
+  function formatToPattern(dateArg, formatString) {
+    const date = typeof dateArg === "string" ? new Date(dateArg) : dateArg;
+    const zonedDate = date.toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
+    return format(zonedDate, formatString);
+  }
+  //   const tanggal = format(new Date(), "yyyy-MMM-dd");
+  const date = new Date();
+  // const  tanggal  = formatToPattern(date, "yyyy-MMM-dd");
+  const tanggal = "11-11";
+
+  //   const dataPelanggan = data.filter((item) => item.tanggal == tanggal);
 
   let totalNull = 0;
   for (const data of dataPelanggan) {
@@ -180,72 +182,74 @@ const date =new Date()
               </ul>
             )}
           </div>
-
-          {/* Buat data yang sudah siap */}
-          <div className="mt-10">
+          {show ? (
             <div>
-              <h2 className="text-2xl font-semibold mb-4 text-gray-700">Antrian Selesai : {totalTrue}</h2>
-            </div>
-            <div className="overflow-x-scroll shadow-sm flex w-full scroll-smooth">
-              <div className=" flex max-w-fit place-items-center my-1 px-[1px] gap-2">
-                {dataPelanggan ? (
-                  dataPelanggan.map((data, i) => {
-                    return (
-                      <div key={i} className="my-4">
-                        {/* buat data antrean sekarang */}
-                        {data.kondisi == "true" ? (
-                          <div className={`bg-green-500 p-3 w-[300px]`}>
-                            <div className="font-normal text-black ">
-                              <h1 className="font-bold ">
-                                No Antrian : <span className="font-normal">{data.noAntrean}</span>
-                              </h1>
-                              <h1 className="font-bold ">Nama Pembeli: {data.namaPelanggan}</h1>
-                              <h1 className="font-bold "> Pesanan : {data.namaPesanan}</h1>
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    );
-                  })
-                ) : (
-                  <h1 id="queueList" className="list-disc pl-5 font-bold text-blue-200">
-                    Nothings Here
-                  </h1>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Buat Antrean Ditolak */}
-          <div className="mt-10">
-            <div>
-              <h2 className="text-2xl font-semibold mb-4 text-gray-700">Ditolak : {totalFalse}</h2>
-            </div>
-            <div className="overflow-x-scroll shadow-sm flex w-full scroll-smooth">
-              <div className=" flex max-w-fit place-items-center my-1 px-[1px] gap-2">
-                {dataPelanggan
-                  ? dataPelanggan.map((data, i) => {
-                      return (
-                        <div key={i} className="my-4">
-                          {/* buat data antrean sekarang */}
-                          {data.kondisi == "false" ? (
-                            <div className={`bg-red-600 p-3 w-[300px]`}>
-                              <div className="font-normal text-black ">
-                                <h1 className="font-bold ">
-                                  No Antrian : <span className="font-normal">{data.noAntrean}</span>
-                                </h1>
-                                <h1 className="font-bold ">Nama Pembeli: {data.namaPelanggan}</h1>
-                                <h1 className="font-bold ">Pesanan : {data.namaPesanan}</h1>
+                <button onClick={()=>{setShow(prev=>!prev)}} className="mt-8 px-3 py-1 hover:bg-green-600 rounded bg-green-700">Hide History</button>
+              <div className="mt-10">
+                <div>
+                  <h2 className="text-2xl font-semibold mb-4 text-gray-700">Antrian Selesai : {totalTrue}</h2>
+                </div>
+                <div className="overflow-x-scroll shadow-sm flex w-full scroll-smooth">
+                  <div className=" flex max-w-fit place-items-center my-1 px-[1px] gap-2">
+                    {dataPelanggan ? (
+                      dataPelanggan.map((data, i) => {
+                        return (
+                          <div key={i} className="my-4">
+                            {/* buat data antrean sekarang */}
+                            {data.kondisi == "true" ? (
+                              <div className={`bg-green-500 p-3 w-[300px]`}>
+                                <div className="font-normal text-black ">
+                                  <h1 className="font-bold ">
+                                    No Antrian : <span className="font-normal">{data.noAntrean}</span>
+                                  </h1>
+                                  <h1 className="font-bold ">Nama Pembeli: {data.namaPelanggan}</h1>
+                                  <h1 className="font-bold "> Pesanan : {data.namaPesanan}</h1>
+                                </div>
                               </div>
+                            ) : null}
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <h1 id="queueList" className="list-disc pl-5 font-bold text-blue-200">
+                        Nothings Here
+                      </h1>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-10">
+                <div>
+                  <h2 className="text-2xl font-semibold mb-4 text-gray-700">Ditolak : {totalFalse}</h2>
+                </div>
+                <div className="overflow-x-scroll shadow-sm flex w-full scroll-smooth">
+                  <div className=" flex max-w-fit place-items-center my-1 px-[1px] gap-2">
+                    {dataPelanggan
+                      ? dataPelanggan.map((data, i) => {
+                          return (
+                            <div key={i} className="my-4">
+                              {/* buat data antrean sekarang */}
+                              {data.kondisi == "false" ? (
+                                <div className={`bg-red-600 p-3 w-[300px]`}>
+                                  <div className="font-normal text-black ">
+                                    <h1 className="font-bold ">
+                                      No Antrian : <span className="font-normal">{data.noAntrean}</span>
+                                    </h1>
+                                    <h1 className="font-bold ">Nama Pembeli: {data.namaPelanggan}</h1>
+                                    <h1 className="font-bold ">Pesanan : {data.namaPesanan}</h1>
+                                  </div>
+                                </div>
+                              ) : null}
                             </div>
-                          ) : null}
-                        </div>
-                      );
-                    })
-                  : null}
+                          );
+                        })
+                      : null}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          ) : <div><button onClick={()=>{setShow(prev=>!prev)} } className="mt-8 px-3 py-1 hover:bg-green-600 rounded bg-green-700">Show History</button></div>}
         </div>
       </div>
     </div>

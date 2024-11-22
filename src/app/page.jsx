@@ -7,7 +7,7 @@ const Page=async()=> {
 
   return (
     <div>
-      <Antrean data={dataPelanggan}/>
+      <Antrean dataPelanggan={dataPelanggan}/>
     </div>
   );
 }
